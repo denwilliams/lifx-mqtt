@@ -26,9 +26,12 @@ service.on("message", (topic, data) => {
   if (action === "off") return light.off(5000);
   if (action === "on") return light.on(5000);
 
-  if (data.brightness === 0) return light.off(5000);
-  if (data.color) light.colorRgbHex(data.color);
-  else if (data.temp) light.color(0, 0, data.brightness, data.temp, 5000);
+  const request = JSON.parse(data);
+
+  if (request.brightness === 0) return light.off(5000);
+  if (request.color) light.colorRgbHex(request.color);
+  else if (request.temp)
+    light.color(0, 0, request.brightness, request.temp, 5000);
 
   light.on();
 });

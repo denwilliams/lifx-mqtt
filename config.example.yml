@@ -1,0 +1,4 @@
+mqtt:
+  uri: mqtt://localhost
+  prefix: lifx/
+service: {}

@@ -1,0 +1,23 @@
+{
+  "name": "lifx-mqtt",
+  "version": "0.1.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denwilliams/lifx-mqtt.git"
+  },
+  "author": "Den Williams",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/denwilliams/lifx-mqtt/issues"
+  },
+  "homepage": "https://github.com/denwilliams/lifx-mqtt#readme",
+  "dependencies": {
+    "mqtt-usvc": "^1.0.6",
+    "node-lifx": "^0.8.0"
+  }
+}

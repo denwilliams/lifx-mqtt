@@ -23,9 +23,10 @@ service.on("message", (topic, data) => {
   console.info("SET DEVICE", lifxId, action, data);
   const light = client.light(lifxId);
 
-  if (action === "off") return light.off();
-  if (action === "on") return light.on();
+  if (action === "off") return light.off(5000);
+  if (action === "on") return light.on(5000);
 
+  if (data.brightness === 0) return light.off(5000);
   if (data.color) light.colorRgbHex(data.color);
   else if (data.temp) light.color(0, 0, data.brightness, data.temp, 5000);
 

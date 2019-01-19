@@ -34,7 +34,7 @@ service.on("message", (topic, data) => {
   else if (request.temp)
     light.color(0, 0, request.brightness, request.temp, 5000);
 
-  light.on();
+  light.on(5000);
 });
 
 service.subscribe("set/#");

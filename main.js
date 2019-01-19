@@ -28,6 +28,7 @@ service.on("message", (topic, data) => {
 
   const request = JSON.parse(data);
 
+  if (!request) return light.off(5000);
   if (request.brightness === 0) return light.off(5000);
   if (request.color) light.colorRgbHex(request.color);
   else if (request.temp)

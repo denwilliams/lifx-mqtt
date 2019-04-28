@@ -32,7 +32,13 @@ service.on("message", (topic, data) => {
   if (request.brightness === 0) return light.off(5000);
   if (request.color) light.colorRgbHex(request.color);
   else if (request.temp)
-    light.color(0, 0, request.brightness, request.temp, 5000);
+    light.color(
+      0,
+      0,
+      request.brightness,
+      request.temp,
+      request.duration || 2000
+    );
 
   light.on(5000);
 });

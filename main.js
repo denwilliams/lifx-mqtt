@@ -29,8 +29,8 @@ service.on("message", (topic, data) => {
   const request = JSON.parse(data);
 
   if (!request) return light.off(5000);
-  if (request.brightness === 0) return light.off(5000);
-  if (request.color) light.colorRgbHex(request.color);
+  if (request.brightness === 0) return light.off(request.duration || 5000);
+  if (request.color) light.colorRgbHex(request.color, request.duration || 2000);
   else if (request.temp)
     light.color(
       0,
@@ -40,7 +40,7 @@ service.on("message", (topic, data) => {
       request.duration || 2000
     );
 
-  light.on(5000);
+  light.on(request.duration || 5000);
 });
 
 service.subscribe("set/#");

@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "lifx-mqtt": "./main.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/denwilliams/lifx-mqtt.git"
@@ -17,7 +20,7 @@
   },
   "homepage": "https://github.com/denwilliams/lifx-mqtt#readme",
   "dependencies": {
-    "mqtt-usvc": "^1.0.6",
+    "mqtt-usvc": "^2.2.1",
     "node-lifx": "^0.8.0"
   }
 }

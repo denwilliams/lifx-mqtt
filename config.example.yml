@@ -1,4 +1,6 @@
 mqtt:
   uri: mqtt://localhost
   prefix: lifx/
+http:
+  port: 9093
 service: {}

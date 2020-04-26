@@ -1,10 +1,11 @@
+#!/usr/bin/env node
 "use strict";
 
 const mqttusvc = require("mqtt-usvc");
 const LifxClient = require("node-lifx").Client;
 const client = new LifxClient();
 
-client.on("light-new", function(light) {
+client.on("light-new", light => {
   console.log("FOUND LIGHT", light.id, light.address);
 });
 
@@ -17,7 +18,7 @@ const service = mqttusvc.create();
 
 service.on("message", (topic, data) => {
   console.log("message", topic);
-  if (!topic.startsWith("set/")) return;
+  if (!topic.startsWith("~/set/")) return;
 
   const [_, lifxId, action] = topic.split("/");
   console.info("SET DEVICE", lifxId, action, data);
@@ -43,4 +44,4 @@ service.on("message", (topic, data) => {
   light.on(request.duration || 5000);
 });
 
-service.subscribe("set/#");
+service.subscribe("~/set/#");

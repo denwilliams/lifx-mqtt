@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/denwilliams/lifx-mqtt#readme",
   "dependencies": {
-    "mqtt-usvc": "^2.2.1",
+    "mqtt-usvc": "^3.0.2",
     "node-lifx": "^0.8.0"
   }
 }

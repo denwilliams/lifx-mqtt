@@ -4,16 +4,26 @@
 const mqttusvc = require("mqtt-usvc");
 const LifxClient = require("node-lifx").Client;
 
+const DEFAULT_ONOFF_DURATION = 5000;
+const DEFAULT_CHANGE_DURATION = 2000;
+
+function parseData(data) {
+  if (!data) return null;
+
+  // For backward compat
+  return (typeof data === "string" ? JSON.parse(data) : data) || null;
+}
+
 async function main() {
   const client = new LifxClient();
 
-  client.on("light-new", light => {
+  client.on("light-new", (light) => {
     console.log("FOUND LIGHT", light.id, light.address);
   });
 
   client.init({
     startDiscovery: true,
-    debug: false
+    debug: false,
   });
 
   const service = await mqttusvc.create();
@@ -24,37 +34,43 @@ async function main() {
       if (!topic.startsWith("~/set/")) return;
 
       const [, , lifxId, action] = topic.split("/");
-      console.info("SET DEVICE", lifxId, action, data);
+      console.info("SET DEVICE", lifxId, action || "", data);
       const light = client.light(lifxId);
 
-      if (action === "off") return light.off(5000);
-      if (action === "on") return light.on(5000);
+      const request = parseData(data);
+      const { color, duration, brightness, temp } = request || {};
 
-      const request = JSON.parse(data);
+      if (action === "off")
+        return light.off(duration || DEFAULT_ONOFF_DURATION);
+      if (action === "on") return light.on(duration || DEFAULT_ONOFF_DURATION);
 
-      if (!request) return light.off(5000);
-      if (request.brightness === 0) return light.off(request.duration || 5000);
-      if (request.color)
-        light.colorRgbHex(request.color, request.duration || 2000);
-      else if (request.temp)
+      if (!request) return light.off(duration || DEFAULT_ONOFF_DURATION);
+      if (brightness === 0)
+        return light.off(duration || DEFAULT_ONOFF_DURATION);
+      if (color) light.colorRgbHex(color, duration || DEFAULT_CHANGE_DURATION);
+      else if (temp)
         light.color(
           0,
           0,
           request.brightness,
           request.temp,
-          request.duration || 2000
+          request.duration || DEFAULT_CHANGE_DURATION
         );
 
-      light.on(request.duration || 5000);
+      light.on(duration || DEFAULT_ONOFF_DURATION);
     } catch (err) {
-      console.error(`Unable to handle message. topic=${topic} data=${data}`);
+      console.error(
+        `Unable to handle message. err="${
+          err.message
+        }" topic=${topic} data=${JSON.stringify(data)}`
+      );
     }
   });
 
   service.subscribe("~/set/#");
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
